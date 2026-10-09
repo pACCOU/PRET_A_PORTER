@@ -148,8 +148,11 @@ Public Class FrmConnexion
     Function envoie_id(ByVal mot As String, ByVal pseu As String)
         Dim idd As Integer = 0
         Try
-            Dim req As String = "select iduser_PK from user where motdepasse ='" & mot & "' and compte ='" & pseu & "'"
+            ' Requête paramétrée (plus de concaténation de la saisie utilisateur dans le SQL)
+            Dim req As String = "select iduser_PK from user where motdepasse = @mot and compte = @pseu"
             Dim Cmd As MySqlCommand = New MySqlCommand(req, Cnn)
+            Cmd.Parameters.AddWithValue("@mot", mot)
+            Cmd.Parameters.AddWithValue("@pseu", pseu)
             Dim Adap As New MySqlDataAdapter
             Adap.SelectCommand = Cmd
             Dim tblCla As New DataTable
